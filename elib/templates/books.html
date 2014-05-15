@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row marketing">
+
+        <div class="row">
+            {% for book in books %}
+                <div class="col-lg-6">
+                    <p><b>Название:</b> {{ book.title }}</p>
+                    <p><b>Авторы:</b>
+                        {% for author in book.authors %}
+                            {{ author.name }}
+                        {% endfor %}
+                    </p>
+                    <p><b>Аннотация:</b> {{ book.abstract }}</p>
+                    <a type="button" class="btn btn-primary" href="book/{{book.id}}">Редактировать</a>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

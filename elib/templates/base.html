@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Электронная библиотека</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('#reg-button').click(function(){
+                $('.jumbotron').detach();
+                $('.row').load('/registration form');
+                return false;
+            });
+
+            $('#log-button').click(function(){
+                $('.jumbotron').detach();
+                $('.row').load('/login form');
+                return false;
+            });
+
+            $(document).on('submit', 'form#reg', function(){
+                var $form = $('form#reg')
+                var username = $('#username').val();
+                var password_one = $('#password_one').val();
+                var password_two = $('#password_two').val();
+
+                $('.alert').detach();
+                if (username === '' || password_one === '' || password_two === ''){
+                    $form.before('<div class="alert alert-warning">Заполните все поля!</div>');
+                    return false;
+                }
+                if (password_one !== password_two) {
+                    $form.before('<div class="alert alert-warning">Введите одинаковые пароли!</div>');
+                    return false;
+                }
+                $.post(
+                    "/registration",
+                    $form.serialize(),
+                    function( data ) {
+                        $form.before('<div class="alert alert-warning">' + data + '</div>');
+                    });
+                return false;
+            });
+
+            
+            $(document).on('submit', 'form#login', function(){
+                var $form = $('form#login')
+                var username = $('#username').val();
+                var password = $('#password').val();
+
+                $('.alert').detach();
+
+                if (username === '' || password === ''){
+                    $form.before('<div class="alert alert-warning">Заполните все поля!</div>');
+                    return false;
+                }
+                $.post(
+                    "/login",
+                    $form.serialize(),
+                    function( data ) {
+                        data = JSON.parse(data)
+                        $form.before('<div class="alert alert-warning">' + data.message + '</div>');
+                        if (data.success){
+                            var delay = 2000;
+                            var url = '/'
+                            setTimeout(function(){ window.location = url }, delay);
+                        }
+                    });
+                return false;
+            });
+
+        });
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <ul class="nav nav-pills pull-right">
+                <li class=""><a href="/">Главная</a></li>
+                {% if not session.logged_in %}
+                    <li><a id="log-button" href="{{ url_for('login') }}">Вход</a></li>
+                {% else %}
+                    <li class=""><a href="/books">Книги</a></li>
+                    <li class=""><a href="/authors">Авторы</a></li>
+                    <li><a href="{{ url_for('logout') }}">Выход</a></li>
+                {% endif %}
+            </ul>
+            <h3 class="text-muted">Электронная библиотека</h3>
+        </div>
+
+        {% block content %}{% endblock %}
+
+        <div class="footer">
+            <p>&copy; alxpy 2014</p>
+        </div>
+    </div>
+</body>
+</html>
+

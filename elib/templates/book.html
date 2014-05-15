@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row marketing">
+
+        <div class="row">
+
+                <div class="col-lg-6">
+                    <p><b>Название:</b> {{ book.title }}</p>
+                    <p><b>Авторы:</b>
+                        {% for author in book.authors %}
+                            {{ author.name }}
+                        {% endfor %}
+                    </p>
+                    <p><b>Аннотация:</b> {{ book.abstract }}</p>
+                    <button type="button" class="btn btn-danger">Удалить</button>
+                </div>
+
+        </div>
+
+    </div>
+{% endblock %}
