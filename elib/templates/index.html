@@ -22,7 +22,7 @@
         <form method="POST" action="search">
             <div class="form-group">
                 {{ form_s.csrf_token }}
-                {{ form_s.query.label }} {{ form_s.query(size=20, class_='form-control') }}
+                {{ form_s.query.label }} {{ form_s.query(class_='form-control') }}
             </div>
             <button type="submit" class="btn btn-default">Искать</button>
         </form>

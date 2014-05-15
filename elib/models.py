@@ -30,10 +30,11 @@ class Book(Base):
     __tablename__ = 'books'
     id = Column(Integer, primary_key=True)
     title = Column(String(50), unique=True)
-    abstract = Column(Text(300), unique=True)
+    abstract = Column(Text(400), unique=True)
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, abstract=None):
         self.title = title
+        self.abstract = abstract
 
     def __repr__(self):
         return '<Title %r>' % (self.title)
@@ -43,13 +44,14 @@ class Author(Base):
     __tablename__ = 'authors'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
-    #biography = Column(Text(400), unique=True)
+    biography = Column(Text(400), unique=True)
     books = relationship("Book",
                     secondary="association",
                     backref="authors")
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, biography=None):
         self.name = name
+        self.biography = biography
 
     def __repr__(self):
         return '<Name %r>' % (self.name)

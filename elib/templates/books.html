@@ -2,17 +2,23 @@
 {% block content %}
     <div class="row marketing">
 
+        <ol class="breadcrumb">
+          <li><a href="/">Главная</a></li>
+          <li class="active"><a href="/new/book">Добавить книгу</a></li>
+          <li class="active">Книги</li>
+        </ol>
         <div class="row">
             {% for book in books %}
-                <div class="col-lg-6">
+                <div class="col-lg-4">
+                    <h3>{{ book.title }}</h3>
                     <p><b>Название:</b> {{ book.title }}</p>
                     <p><b>Авторы:</b>
                         {% for author in book.authors %}
-                            {{ author.name }}
+                            {{ author.name }}, 
                         {% endfor %}
                     </p>
                     <p><b>Аннотация:</b> {{ book.abstract }}</p>
-                    <a type="button" class="btn btn-primary" href="book/{{book.id}}">Редактировать</a>
+                    <p><a type="button" class="btn btn-primary" href="book/{{book.id}}">Редактировать</a></p>
                 </div>
             {% endfor %}
         </div>

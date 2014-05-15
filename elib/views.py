@@ -1,10 +1,10 @@
 import json
 
-from flask import render_template, flash, redirect, session, url_for, jsonify
+from flask import render_template, flash, redirect, session, url_for, request
 
 from . import app
 from .database import db_session
-from .forms import LoginForm, RegistrationForm, SearchForm
+from .forms import LoginForm, RegistrationForm, SearchForm, BookForm, AuthorForm
 from .models import Book, Author, User
 
 
@@ -59,24 +59,102 @@ def books():
     return render_template('books.html', books=books)
 
 
-@app.route('/book/<book_id>')
-def book(book_id):
-    book = db_session.query(Book).get(book_id)
-    return render_template('book.html', book=book)
-
-
 @app.route('/authors')
 def authors():
-    #authors = db_session.query(Author).all()
-    #authors = db_session.query(Author).filter(Author.book.any(title="Книга 1"))
-
-    #book = db_session.query(Book).filter()
-
-    #authors = db_session.query(Author).filter(Author.book.any(title=book[1].title))
     authors = db_session.query(Author).all()
-
     return render_template('authors.html', authors=authors)
 
+
+@app.route('/book/<book_id>', methods=['GET', 'POST'])
+def book(book_id):
+    book = db_session.query(Book).get(book_id)
+    form = BookForm(
+        title = book.title,
+        abstract = book.abstract,
+    )
+
+    if form.validate_on_submit():
+        book.title = form.title.data
+        book.abstract =form.abstract.data
+        db_session.add(book)
+        db_session.commit()
+
+    return render_template('book.html', book=book, form=form)
+
+
+@app.route('/author/<author_id>', methods=['GET', 'POST'])
+def author(author_id):
+    author = db_session.query(Author).get(author_id)
+    form = AuthorForm(
+        name = author.name,
+        biography = author.biography,
+    )
+
+    if form.validate_on_submit():
+        author.name = form.name.data
+        author.biography =form.biography.data
+        db_session.add(author)
+        db_session.commit()
+
+    return render_template('author.html', author=author, form=form)
+
+
+@app.route('/del/book/<book_id>')
+def del_book(book_id):
+    book = db_session.query(Book).get(book_id)
+    db_session.delete(book)
+    db_session.commit()
+    return redirect(url_for('books'))
+
+
+@app.route('/del/author/<author_id>')
+def del_author(author_id):
+    author = db_session.query(Author).get(author_id)
+    db_session.delete(author)
+    db_session.commit()
+    return redirect(url_for('authors'))
+
+
+@app.route('/new/book/', methods=['GET', 'POST'])
+def new_book():
+    form = BookForm()
+    authors = db_session.query(Author).all()
+
+    if form.validate_on_submit():
+        book = Book(
+            form.title.data,
+            form.abstract.data,
+        )
+
+        ids = request.form.getlist('authors')
+        book.authors = db_session.query(Author).filter(Author.id.in_(ids)).all()
+
+        db_session.add(book)
+        db_session.commit()
+
+        return redirect(url_for('books'))
+    return render_template('new_book.html', form=form, authors=authors)
+
+
+@app.route('/new/author/', methods=['GET', 'POST'])
+def new_author():
+    form = AuthorForm()
+    books = db_session.query(Book).all()
+
+    if form.validate_on_submit():
+        author = Author(
+            form.name.data,
+            form.biography.data,
+        )
+
+        ids = request.form.getlist('books')
+        author.books = db_session.query(Book).filter(Book.id.in_(ids)).all()
+
+        db_session.add(author)
+        db_session.commit()
+
+        return redirect(url_for('authors'))
+    return render_template('new_author.html', form=form, books=books)
 
 @app.teardown_request
 def shutdown_session(exception=None):

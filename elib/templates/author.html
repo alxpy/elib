@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+    <ol class="breadcrumb">
+      <li><a href="/">Главная</a></li>
+      <li><a href="/authors">Авторы</a></li>
+      <li class="active">{{ author.name }}</li>
+    </ol>
+    <div class="row marketing">
+        <form method="POST" action="">
+            <div class="form-group">
+                {{ form.csrf_token }}
+                {{ form.name.label }} {{ form.name(class_='form-control') }}
+                {{ form.biography.label }} {{ form.biography(class_='form-control') }}
+            </div>
+            <p><b>Книги:</b>
+                {% for book in author.books %}
+                    {{ book.title }}, 
+                {% endfor %}
+            </p>
+            <button type="submit" class="btn btn-primary">Cохранить изменения</button>
+            <a href="/del/author/{{ author.id }}" class="btn btn-danger">Удалить автора</a>
+        </form>
+    </div>
+{% endblock %}
