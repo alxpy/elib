@@ -2,6 +2,8 @@ elib
 ====
 Это тестовое web-приложение по управлению электронной библиотекой.
 
+http://alx-elib.herokuapp.com/
+
 Установка зависимостей:
 ```
 pip install -r requirements.txt
