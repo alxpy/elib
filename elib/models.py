@@ -30,7 +30,7 @@ class Book(Base):
     __tablename__ = 'books'
     id = Column(Integer, primary_key=True)
     title = Column(String(50), unique=True)
-    abstract = Column(Text(400), unique=True)
+    abstract = Column(Text, unique=True)
 
     def __init__(self, title=None, abstract=None):
         self.title = title
@@ -44,7 +44,7 @@ class Author(Base):
     __tablename__ = 'authors'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
-    biography = Column(Text(400), unique=True)
+    biography = Column(Text, unique=True)
     books = relationship("Book",
                     secondary="association",
                     backref="authors")
