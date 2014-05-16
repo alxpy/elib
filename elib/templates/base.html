@@ -93,13 +93,14 @@
                     function( data ) {
                         data = JSON.parse(data)
                         if (data.success){
-                            $form.after('<br><table class="table table-hover table-striped"><tbody><tr><td></td></tr></tbody></table>');
-                            $('tbody').html(data.message)
+                            // $form.after('<br><table class="table table-hover table-striped"><tbody><tr><td></td></tr></tbody></table>');
+                            // $('tbody').html(data.message)
+                            $('html').load('/books #book_{% if book %}{{ book.id }}{% endif %}');
                         } else {
                             $form.before('<div class="alert alert-warning">' + data.message + '</div>');
                         }
                     });
-                return false;
+                //return false;
             });
 
 
@@ -110,24 +111,6 @@
 
                 $.post(
                     "/book/{% if book %}{{ book.id }}{% endif %}",
-                    $form.serialize(),
-                    function( data ) {
-                        data = JSON.parse(data)
-                        if (data.success){
-                            $form.before('<div class="alert alert-success">' + data.message + '</div>');
-                        }
-                    });
-                return false;
-            });
-
-
-            $(document).on('submit', 'form.authors', function(){
-                var $form = $('form.authors')
-
-                $('.alert').detach();
-
-                $.post(
-                    "/author/{% if author %}{{ author.id }}{% endif %}",
                     $form.serialize(),
                     function( data ) {
                         data = JSON.parse(data)

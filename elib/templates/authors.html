@@ -8,21 +8,19 @@
             {% endif %}
             <li class="active">Писатели</li>
         </ol>
-        <div class="row">
-            {% for author in authors %}
-                <div class="col-lg-4">
-                    <h3>{{ author.name }}</h3>
-                    <p><b>Имя:</b> {{ author.name }}</p>
-                    <p><b>Книги:</b>
-                        {% for book in author.books %}
-                            {{ book.title }}, 
-                        {% endfor %}
-                    </p>
-                    <p><b>Биография:</b>{{ author.biography }}</p>
-                    <p><b>ID:</b>{{ author.id }}</p>
-                    <a href="author/{{author.id}}"type="button" class="btn btn-primary">Редактировать</a>
-                </div>
-            {% endfor %}
-        </div>   
+        {% for author in authors %}
+            <div class="col-lg-4">
+                <h3>{{ author.name }}</h3>
+                <p><b>Имя:</b> {{ author.name }}</p>
+                <p><b>Книги:</b>
+                    {% for book in author.books %}
+                        {{ book.title }}, 
+                    {% endfor %}
+                </p>
+                <p><b>Биография:</b>{{ author.biography }}</p>
+                <p><b>ID:</b>{{ author.id }}</p>
+                <a href="author/{{author.id}}"type="button" class="btn btn-primary">Редактировать</a>
+            </div>
+        {% endfor %} 
     </div>
 {% endblock %}

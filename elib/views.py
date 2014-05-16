@@ -202,22 +202,17 @@ def new_author():
 def search(exception=None):
     form = SearchForm()
     if form.validate_on_submit():
-        response = []
-
         query = form.query.data
         books = db_session.query(Book).filter(Book.title.like(query)).all()
-        authors = db_session.query(Author).filter(Author.name.like(query)).all()
+        author = db_session.query(Author).filter(Author.name.like(query)).first()
+        if author:
+            books = db_session.query(Book).filter(Book.authors.any(Author.id==author.id))
 
-        if (not books) and (not authors):
-            return json.dumps({'message': 'Ничего не найдено!', 'success': False})
+        if not books:
+            fail = True
+            return render_template('search.html', form=form, fail=fail)
 
-        result = ''
-        for author in authors:
-            result += '<tr><td>Писатель: <a href="/author/{}">{}</a></td></tr>'.format(author.id, author.name)
-        for book in books:
-            result += '<tr><td>Книга: <a href="/book/{}">{}</a></td></tr>'.format(book.id, book.title)
-
-        return json.dumps({'message': result, 'success': True})
+        return render_template('search.html', form=form, books=books)
 
     return render_template('search.html', form=form)
 
