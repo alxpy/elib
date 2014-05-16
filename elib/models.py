@@ -10,7 +10,7 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(50), unique=True)
-    pw_hash = Column(String(100), unique=True)
+    pw_hash = Column(String(100))
 
     def __init__(self, username=None, password=None):
         self.username = username

@@ -5,7 +5,7 @@
         <form method="POST" class="search">
             <div class="form-group">
                 {{ form.csrf_token }}
-                {{ form.query.label }} {{ form.query(class_='form-control') }}
+                {{ form.query.label }} {{ form.query(class_='form-control', placeholder='Байрон') }}
             </div>
             <button type="submit" class="btn btn-default">Искать</button>
         </form>
