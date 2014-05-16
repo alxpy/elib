@@ -72,6 +72,28 @@
                 return false;
             });
 
+
+            $(document).on('submit', 'form.search', function(){
+                var $form = $('form.search')
+
+                $('.alert').detach();
+                $('table').detach();
+
+                $.post(
+                    "/search",
+                    $form.serialize(),
+                    function( data ) {
+                        data = JSON.parse(data)
+                        if (data.success){
+                            $form.after('<br><table class="table table-hover table-striped"><tbody><tr><td></td></tr></tbody></table>');
+                            $('tbody').html(data.message)
+                        } else {
+                            $form.before('<div class="alert alert-warning">' + data.message + '</div>');
+                        }
+                    });
+                return false;
+            });
+
         });
     </script>
 
@@ -81,11 +103,12 @@
         <div class="header">
             <ul class="nav nav-pills pull-right">
                 <li class=""><a href="/">Главная</a></li>
+                <li class=""><a href="/search">Поиск</a></li>
                 {% if not session.logged_in %}
                     <li><a id="log-button" href="{{ url_for('login') }}">Вход</a></li>
                 {% else %}
                     <li class=""><a href="/books">Книги</a></li>
-                    <li class=""><a href="/authors">Авторы</a></li>
+                    <li class=""><a href="/authors">Писатели</a></li>
                     <li><a href="{{ url_for('logout') }}">Выход</a></li>
                 {% endif %}
             </ul>

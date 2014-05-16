@@ -3,8 +3,8 @@
     <div class="row marketing">
         <ol class="breadcrumb">
             <li><a href="/">Главная</a></li>
-            <li><a href="/new/author">Добавить автора</a></li>
-            <li class="active">Авторы</li>
+            <li><a href="/new/author">Добавить писателя</a></li>
+            <li class="active">Писатели</li>
         </ol>
         <div class="row">
             {% for author in authors %}
@@ -16,6 +16,7 @@
                         {% endfor %}
                     </p>
                     <p><b>Биография:</b>{{ author.biography }}</p>
+                    <p><b>ID:</b>{{ author.id }}</p>
                     <a href="author/{{author.id}}"type="button" class="btn btn-primary">Редактировать</a>
                 </div>
             {% endfor %}

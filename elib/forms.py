@@ -29,5 +29,3 @@ class AuthorForm(Form):
 class SearchForm(Form):
     query = TextField('Поиск', validators=[DataRequired()])
 
-    #def __init__(self):
-    #   self.query = 'arg'

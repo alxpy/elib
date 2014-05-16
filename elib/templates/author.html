@@ -2,7 +2,7 @@
 {% block content %}
     <ol class="breadcrumb">
       <li><a href="/">Главная</a></li>
-      <li><a href="/authors">Авторы</a></li>
+      <li><a href="/authors">Писатели</a></li>
       <li class="active">{{ author.name }}</li>
     </ol>
     <div class="row marketing">
@@ -17,6 +17,7 @@
                     {{ book.title }}, 
                 {% endfor %}
             </p>
+            <p><b>ID:</b>{{ author.id }}</p>
             <button type="submit" class="btn btn-primary">Cохранить изменения</button>
             <a href="/del/author/{{ author.id }}" class="btn btn-danger">Удалить автора</a>
         </form>

@@ -4,7 +4,12 @@
     <div class="jumbotron">
         <h1>Электронная библиотека</h1>
         <p class="lead">Это тестовое web-приложение по управлению электронной библиотекой.</p>
-        <p><span id="reg-button" class="btn btn-lg btn-success" role="button" href="{{ url_for('registration') }}">Регистрация</span></p>
+        {% if not session.logged_in %}
+            <p><span id="reg-button" class="btn btn-lg btn-success" role="button" href="{{ url_for('registration') }}">Регистрация</span></p>
+        {% else %}
+            <a id="button" class="btn btn-lg btn-success" role="button" href="{{ url_for('books') }}">Книги</a>
+            <a id="button" class="btn btn-lg btn-success" role="button" href="{{ url_for('authors') }}">Писатели</a>
+        {% endif %}
     </div>
 
     <div class="row marketing">
@@ -18,14 +23,6 @@
         </ul>
         {% endif %}
         {% endwith %}
-
-        <form method="POST" action="search">
-            <div class="form-group">
-                {{ form_s.csrf_token }}
-                {{ form_s.query.label }} {{ form_s.query(class_='form-control') }}
-            </div>
-            <button type="submit" class="btn btn-default">Искать</button>
-        </form>
 
     </div>
 

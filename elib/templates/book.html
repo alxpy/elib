@@ -17,6 +17,7 @@
                     {{ author.name }}, 
                 {% endfor %}
             </p>
+            <p><b>ID:</b> {{ book.id }}</p>
             <button type="submit" class="btn btn-primary">Cохранить изменения</button>
             <a href="/del/book/{{ book.id }}"class="btn btn-danger">Удалить книгу</a>
 

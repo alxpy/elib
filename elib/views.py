@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, session, url_for, request
 
 from . import app
 from .database import db_session
-from .forms import LoginForm, RegistrationForm, SearchForm, BookForm, AuthorForm
+from .forms import LoginForm, RegistrationForm, BookForm, AuthorForm, SearchForm
 from .models import Book, Author, User
 
 
@@ -155,6 +155,31 @@ def new_author():
 
         return redirect(url_for('authors'))
     return render_template('new_author.html', form=form, books=books)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search(exception=None):
+    form = SearchForm()
+    if form.validate_on_submit():
+        response = []
+
+        query = form.query.data
+        books = db_session.query(Book).filter(Book.title.like(query)).all()
+        authors = db_session.query(Author).filter(Author.name.like(query)).all()
+
+        if (not books) and (not authors):
+            return json.dumps({'message': 'Ничего не найдено!', 'success': False})
+
+        result = ''
+        for author in authors:
+            result += '<tr><td>Писатель: <a href="/author/{}">{}</a></td></tr>'.format(author.id, author.name)
+        for book in books:
+            result += '<tr><td>Книга: <a href="/book/{}">{}</a></td></tr>'.format(book.id, book.title)
+
+        return json.dumps({'message': result, 'success': True})
+
+    return render_template('search.html', form=form)
+
 
 @app.teardown_request
 def shutdown_session(exception=None):
