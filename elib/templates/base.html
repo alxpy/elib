@@ -102,6 +102,42 @@
                 return false;
             });
 
+
+            $(document).on('submit', 'form.books', function(){
+                var $form = $('form.books')
+
+                $('.alert').detach();
+
+                $.post(
+                    "/book/{% if book %}{{ book.id }}{% endif %}",
+                    $form.serialize(),
+                    function( data ) {
+                        data = JSON.parse(data)
+                        if (data.success){
+                            $form.before('<div class="alert alert-success">' + data.message + '</div>');
+                        }
+                    });
+                return false;
+            });
+
+
+            $(document).on('submit', 'form.authors', function(){
+                var $form = $('form.authors')
+
+                $('.alert').detach();
+
+                $.post(
+                    "/author/{% if author %}{{ author.id }}{% endif %}",
+                    $form.serialize(),
+                    function( data ) {
+                        data = JSON.parse(data)
+                        if (data.success){
+                            $form.before('<div class="alert alert-success">' + data.message + '</div>');
+                        }
+                    });
+                return false;
+            });
+
         });
     </script>
 

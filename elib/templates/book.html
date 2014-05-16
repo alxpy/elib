@@ -8,7 +8,7 @@
         </ol>
 
         {% if session.logged_in %}
-            <form method="POST" action="">
+            <form method="POST" class="books">
                 <div class="form-group">
                     {{ form.csrf_token }}
                     {{ form.title.label }} {{ form.title(class_='form-control') }}

@@ -7,7 +7,7 @@
     </ol>
     <div class="row marketing">
         {% if session.logged_in %}
-            <form method="POST" action="">
+            <form method="POST" class="authors">
                 <div class="form-group">
                     {{ form.csrf_token }}
                     {{ form.name.label }} {{ form.name(class_='form-control') }}

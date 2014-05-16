@@ -91,6 +91,7 @@ def book(book_id):
         book.abstract =form.abstract.data
         db_session.add(book)
         db_session.commit()
+        return json.dumps({'message': 'Изменения сохранены.', 'success': True})
 
     return render_template('book.html', book=book, form=form, authors=authors)
 
@@ -118,6 +119,7 @@ def author(author_id):
         author.biography =form.biography.data
         db_session.add(author)
         db_session.commit()
+        return json.dumps({'message': 'Изменения сохранены.', 'success': True})
 
     return render_template('author.html', author=author, form=form, books=books)
 
