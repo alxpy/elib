@@ -13,6 +13,14 @@
                     {{ form.csrf_token }}
                     {{ form.title.label }} {{ form.title(class_='form-control') }}
                     {{ form.abstract.label }} {{ form.abstract(class_='form-control') }}
+                    {% if authors %}
+                        <label for="title">Авторы книги:</label>
+                        <select name="authors" multiple class="form-control">
+                            {% for author in authors %}
+                                <option value="{{ author.id }}">{{ author.name}} </option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
                 </div>
                 <p><b>Авторы:</b>
                     {% for author in book.authors %}

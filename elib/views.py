@@ -46,9 +46,10 @@ def registration():
         db_session.add(user)
         try:
             db_session.commit()
-            return 'Удачная регистрация'
+            session['logged_in'] = True
+            return json.dumps({'message': 'Удачная регистрация', 'success': True})
         except:
-            return 'Не смогли зарегистрировать пользователя. Скорее всего, уже есть пользователь с таким именем!'
+            return json.dumps({'message': 'Не смогли зарегистрировать пользователя. Скорее всего, уже есть пользователь с таким именем!', 'success': False})
     return render_template('registration.html', form=form)
 
 
@@ -67,6 +68,11 @@ def authors():
 @app.route('/book/<book_id>', methods=['GET', 'POST'])
 def book(book_id):
     book = db_session.query(Book).get(book_id)
+    authors = db_session.query(Author).all()
+    if book is None:
+        flash('К сожалению, данной книги уже нет в нашей базе.')
+        return redirect(url_for('index'))
+
     form = BookForm(
         title = book.title,
         abstract = book.abstract,
@@ -77,17 +83,23 @@ def book(book_id):
             flash('У вас нет прав на редактирование книги.')
             return redirect(url_for('index'))
 
+        ids = request.form.getlist('authors')
+        if ids:
+            book.authors = db_session.query(Author).filter(Author.id.in_(ids)).all()
+
         book.title = form.title.data
         book.abstract =form.abstract.data
         db_session.add(book)
         db_session.commit()
 
-    return render_template('book.html', book=book, form=form)
+    return render_template('book.html', book=book, form=form, authors=authors)
 
 
 @app.route('/author/<author_id>', methods=['GET', 'POST'])
 def author(author_id):
     author = db_session.query(Author).get(author_id)
+    books = db_session.query(Book).all()
+
     form = AuthorForm(
         name = author.name,
         biography = author.biography,
@@ -98,12 +110,16 @@ def author(author_id):
             flash('У вас нет прав на редактирование автора.')
             return redirect(url_for('index'))
 
+        ids = request.form.getlist('books')
+        if ids:
+            author.books = db_session.query(Book).filter(Book.id.in_(ids)).all()
+
         author.name = form.name.data
         author.biography =form.biography.data
         db_session.add(author)
         db_session.commit()
 
-    return render_template('author.html', author=author, form=form)
+    return render_template('author.html', author=author, form=form, books=books)
 
 
 @app.route('/del/book/<book_id>')
@@ -202,6 +218,11 @@ def search(exception=None):
         return json.dumps({'message': result, 'success': True})
 
     return render_template('search.html', form=form)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 @app.teardown_request

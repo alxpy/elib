@@ -42,7 +42,13 @@
                     "/registration",
                     $form.serialize(),
                     function( data ) {
-                        $form.before('<div class="alert alert-warning">' + data + '</div>');
+                        data = JSON.parse(data)
+                        $form.before('<div class="alert alert-warning">' + data.message + '</div>');
+                        if (data.success){
+                            var delay = 2000;
+                            var url = '/'
+                            setTimeout(function(){ window.location = url }, delay);
+                        }
                     });
                 return false;
             });

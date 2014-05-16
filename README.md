@@ -23,5 +23,7 @@ $ sqlite3 sqlite.db < data.sql
 ```
 
 Данные для входа:
+```
 alex:pass
 nic:pass2
+```
