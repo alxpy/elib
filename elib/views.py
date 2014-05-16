@@ -11,8 +11,7 @@ from .models import Book, Author, User
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = LoginForm()
-    form_s = SearchForm()
-    return render_template('index.html', form=form, form_s=form_s)
+    return render_template('index.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -74,6 +73,10 @@ def book(book_id):
     )
 
     if form.validate_on_submit():
+        if not session['logged_in']:
+            flash('У вас нет прав на редактирование книги.')
+            return redirect(url_for('index'))
+
         book.title = form.title.data
         book.abstract =form.abstract.data
         db_session.add(book)
@@ -91,6 +94,10 @@ def author(author_id):
     )
 
     if form.validate_on_submit():
+        if not session['logged_in']:
+            flash('У вас нет прав на редактирование автора.')
+            return redirect(url_for('index'))
+
         author.name = form.name.data
         author.biography =form.biography.data
         db_session.add(author)
@@ -101,6 +108,10 @@ def author(author_id):
 
 @app.route('/del/book/<book_id>')
 def del_book(book_id):
+    if not session['logged_in']:
+        flash('У вас нет прав на удаление книги.')
+        return redirect(url_for('index'))
+
     book = db_session.query(Book).get(book_id)
     db_session.delete(book)
     db_session.commit()
@@ -109,6 +120,10 @@ def del_book(book_id):
 
 @app.route('/del/author/<author_id>')
 def del_author(author_id):
+    if not session['logged_in']:
+        flash('У вас нет прав на удаление автора.')
+        return redirect(url_for('index'))
+
     author = db_session.query(Author).get(author_id)
     db_session.delete(author)
     db_session.commit()
@@ -117,6 +132,10 @@ def del_author(author_id):
 
 @app.route('/new/book/', methods=['GET', 'POST'])
 def new_book():
+    if not session['logged_in']:
+        flash('У вас нет прав на добавление книги.')
+        return redirect(url_for('index'))
+
     form = BookForm()
     authors = db_session.query(Author).all()
 
@@ -138,6 +157,10 @@ def new_book():
 
 @app.route('/new/author/', methods=['GET', 'POST'])
 def new_author():
+    if not session['logged_in']:
+        flash('У вас нет прав на добавление автора.')
+        return redirect(url_for('index'))
+
     form = AuthorForm()
     books = db_session.query(Book).all()
 
@@ -184,3 +207,4 @@ def search(exception=None):
 @app.teardown_request
 def shutdown_session(exception=None):
     db_session.remove()
+

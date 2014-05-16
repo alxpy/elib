@@ -3,12 +3,15 @@
     <div class="row marketing">
         <ol class="breadcrumb">
             <li><a href="/">Главная</a></li>
-            <li><a href="/new/author">Добавить писателя</a></li>
+            {% if session.logged_in %}
+                <li><a href="/new/author">Добавить писателя</a></li>
+            {% endif %}
             <li class="active">Писатели</li>
         </ol>
         <div class="row">
             {% for author in authors %}
-                <div class="col-lg-6">
+                <div class="col-lg-4">
+                    <h3>{{ author.name }}</h3>
                     <p><b>Имя:</b> {{ author.name }}</p>
                     <p><b>Книги:</b>
                         {% for book in author.books %}

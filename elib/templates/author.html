@@ -6,20 +6,34 @@
       <li class="active">{{ author.name }}</li>
     </ol>
     <div class="row marketing">
-        <form method="POST" action="">
-            <div class="form-group">
-                {{ form.csrf_token }}
-                {{ form.name.label }} {{ form.name(class_='form-control') }}
-                {{ form.biography.label }} {{ form.biography(class_='form-control') }}
-            </div>
-            <p><b>Книги:</b>
-                {% for book in author.books %}
-                    {{ book.title }}, 
-                {% endfor %}
-            </p>
-            <p><b>ID:</b>{{ author.id }}</p>
-            <button type="submit" class="btn btn-primary">Cохранить изменения</button>
-            <a href="/del/author/{{ author.id }}" class="btn btn-danger">Удалить автора</a>
-        </form>
+        {% if session.logged_in %}
+            <form method="POST" action="">
+                <div class="form-group">
+                    {{ form.csrf_token }}
+                    {{ form.name.label }} {{ form.name(class_='form-control') }}
+                    {{ form.biography.label }} {{ form.biography(class_='form-control') }}
+                </div>
+                <p><b>Книги:</b>
+                    {% for book in author.books %}
+                        {{ book.title }}, 
+                    {% endfor %}
+                </p>
+                <p><b>ID:</b>{{ author.id }}</p>
+                <button type="submit" class="btn btn-primary">Cохранить изменения</button>
+                <a href="/del/author/{{ author.id }}" class="btn btn-danger">Удалить автора</a>
+            </form>
+        {% else %}
+            <div class="col-lg-6">
+                <p><b>Имя:</b> {{ author.name }}</p>
+                <p><b>Книги:</b>
+                    {% for book in author.books %}
+                        {{ book.title }}, 
+                    {% endfor %}
+                </p>
+                <p><b>Биография:</b>{{ author.biography }}</p>
+                <p><b>ID:</b>{{ author.id }}</p>
+                <p>Права на редактирование книг есть только у зарегестрированных пользователей. Вы можете <a href='/login'>войти</a>.</p>
+                </div>
+        {% endif %}
     </div>
 {% endblock %}

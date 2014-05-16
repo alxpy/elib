@@ -4,7 +4,9 @@
 
         <ol class="breadcrumb">
           <li><a href="/">Главная</a></li>
-          <li class="active"><a href="/new/book">Добавить книгу</a></li>
+          {% if session.logged_in %}
+            <li class="active"><a href="/new/book">Добавить книгу</a></li>
+          {% endif %}
           <li class="active">Книги</li>
         </ol>
         <div class="row">
