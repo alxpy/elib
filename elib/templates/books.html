@@ -11,7 +11,7 @@
         </ol>
         {% for book in books %}
             <div id="book_{{ book.id }}" class="col-lg-6">
-                <h3>{{ book.title }}</h3>
+                <h3><a href="book/{{book.id}}">{{ book.title }}</a></h3>
                 <p><b>Название:</b> {{ book.title }}</p>
                 <p><b>Авторы:</b>
                     {% for author in book.authors %}
@@ -20,7 +20,6 @@
                 </p>
                 <p><b>Аннотация:</b> {{ book.abstract }}</p>
                 <p><b>ID:</b> {{ book.id }}</p>
-                <p><a type="button" class="btn btn-primary" href="book/{{book.id}}">Редактировать</a></p>
             </div>
         {% endfor %}
 

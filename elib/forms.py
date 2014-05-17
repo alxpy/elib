@@ -18,7 +18,6 @@ class RegistrationForm(Form):
 class BookForm(Form):
     title = TextField('Название', validators=[DataRequired()])
     abstract = TextAreaField('Аннотация', validators=[DataRequired()])
-    # authors = SelectMultipleField('Аннотация', choices = [('1', 'Choice1'), ('2', 'Choice2'), ('3', 'Choice3')])
 
 
 class AuthorForm(Form):
