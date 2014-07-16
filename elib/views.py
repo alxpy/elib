@@ -203,8 +203,9 @@ def search(exception=None):
     form = SearchForm()
     if form.validate_on_submit():
         query = form.query.data
-        books = db_session.query(Book).filter(Book.title.like(query)).all()
-        author = db_session.query(Author).filter(Author.name.like(query)).first()
+        query = '%{}%'.format(query)
+        books = db_session.query(Book).filter(Book.title.ilike(query)).all()
+        author = db_session.query(Author).filter(Author.name.ilike(query)).first()
         if author:
             books = db_session.query(Book).filter(Book.authors.any(Author.id==author.id))
 
