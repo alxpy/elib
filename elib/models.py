@@ -45,9 +45,7 @@ class Author(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
     biography = Column(Text, unique=True)
-    books = relationship("Book",
-                    secondary="association",
-                    backref="authors")
+    books = relationship("Book", secondary="association", backref="authors")
 
     def __init__(self, name=None, biography=None):
         self.name = name
@@ -57,7 +55,4 @@ class Author(Base):
         return '<Name %r>' % (self.name)
 
 
-association_table = Table('association', Base.metadata,
-    Column('books_id', Integer, ForeignKey('books.id')),
-    Column('authors_id', Integer, ForeignKey('authors.id'))
-)
+association_table = Table('association', Base.metadata, Column('books_id', Integer, ForeignKey('books.id')), Column('authors_id', Integer, ForeignKey('authors.id')))

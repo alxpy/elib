@@ -1,4 +1,4 @@
-from flask_wtf import Form #, RecaptchaField
+from flask_wtf import Form
 from wtforms import TextField, TextAreaField, SelectMultipleField
 from wtforms.validators import DataRequired
 
@@ -12,7 +12,6 @@ class RegistrationForm(Form):
     username = TextField('Логин', validators=[DataRequired()])
     password_one = TextField('Пароль', validators=[DataRequired()])
     password_two = TextField('Пароль еще раз', validators=[DataRequired()])
-    # recaptcha = RecaptchaField()
 
 
 class BookForm(Form):
@@ -27,4 +26,3 @@ class AuthorForm(Form):
 
 class SearchForm(Form):
     query = TextField('Поиск', validators=[DataRequired()])
-

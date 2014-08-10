@@ -47,9 +47,13 @@ def registration():
         try:
             db_session.commit()
             session['logged_in'] = True
-            return json.dumps({'message': 'Удачная регистрация', 'success': True})
+            return json.dumps({'message': 'Удачная регистрация',
+                              'success': True})
         except:
-            return json.dumps({'message': 'Не смогли зарегистрировать пользователя. Скорее всего, уже есть пользователь с таким именем!', 'success': False})
+            return json.dumps({'message': 'Не смогли зарегистрировать пользователя.\
+                              Скорее всего, уже есть пользователь\
+                              с таким именем!',
+                              'success': False})
     return render_template('registration.html', form=form)
 
 
@@ -73,10 +77,7 @@ def book(book_id):
         flash('К сожалению, данной книги уже нет в нашей базе.')
         return redirect(url_for('index'))
 
-    form = BookForm(
-        title = book.title,
-        abstract = book.abstract,
-    )
+    form = BookForm(title=book.title, abstract=book.abstract)
 
     if form.validate_on_submit():
         if not session['logged_in']:
@@ -88,7 +89,7 @@ def book(book_id):
             book.authors = db_session.query(Author).filter(Author.id.in_(ids)).all()
 
         book.title = form.title.data
-        book.abstract =form.abstract.data
+        book.abstract = form.abstract.data
         db_session.add(book)
         db_session.commit()
         return json.dumps({'message': 'Изменения сохранены.', 'success': True})
@@ -101,10 +102,7 @@ def author(author_id):
     author = db_session.query(Author).get(author_id)
     books = db_session.query(Book).all()
 
-    form = AuthorForm(
-        name = author.name,
-        biography = author.biography,
-    )
+    form = AuthorForm(name=author.name, biography=author.biography)
 
     if form.validate_on_submit():
         if not session['logged_in']:
@@ -116,12 +114,13 @@ def author(author_id):
             author.books = db_session.query(Book).filter(Book.id.in_(ids)).all()
 
         author.name = form.name.data
-        author.biography =form.biography.data
+        author.biography = form.biography.data
         db_session.add(author)
         db_session.commit()
         return json.dumps({'message': 'Изменения сохранены.', 'success': True})
 
-    return render_template('author.html', author=author, form=form, books=books)
+    return render_template('author.html', author=author,
+                           form=form, books=books)
 
 
 @app.route('/del/book/<book_id>')
@@ -207,7 +206,7 @@ def search(exception=None):
         books = db_session.query(Book).filter(Book.title.ilike(query)).all()
         author = db_session.query(Author).filter(Author.name.ilike(query)).first()
         if author:
-            books = db_session.query(Book).filter(Book.authors.any(Author.id==author.id))
+            books = db_session.query(Book).filter(Book.authors.any(Author.id == author.id))
 
         if not books:
             fail = True
@@ -226,4 +225,3 @@ def page_not_found(e):
 @app.teardown_request
 def shutdown_session(exception=None):
     db_session.remove()
-
